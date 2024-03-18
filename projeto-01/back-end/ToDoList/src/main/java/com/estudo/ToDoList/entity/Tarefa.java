@@ -1,4 +1,4 @@
-package com.estudo.ToDoList.model;
+package com.estudo.ToDoList.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "TB_TAREFA")
 public class Tarefa {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotBlank(message = "Título não pode ser vazio")
     @Column(nullable = false)

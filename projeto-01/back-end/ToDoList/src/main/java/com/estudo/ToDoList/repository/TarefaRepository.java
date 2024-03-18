@@ -1,6 +1,6 @@
 package com.estudo.ToDoList.repository;
 
-import com.estudo.ToDoList.model.Tarefa;
+import com.estudo.ToDoList.entity.Tarefa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
