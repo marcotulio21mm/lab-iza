@@ -20,11 +20,14 @@ public class TarefaController {
         return tarefaService.criarTarefa(titulo);
     }
 
-    @PostMapping("/{id}/status")
-    public Tarefa mudarStatus(@PathVariable long id, @RequestParam boolean status ) {
-        return tarefaService.mudarStatus(id, status);
+    @PostMapping("/{id}/status/concluir")
+    public Tarefa concluirTarefa(@PathVariable long id) {
+        return tarefaService.mudarStatus(id, true);
     }
-
+    @PostMapping("/{id}/status/desconcluir")
+    public Tarefa desconcluirTarefa(@PathVariable long id) {
+        return tarefaService.mudarStatus(id, false);
+    }
     @DeleteMapping("/{id}")
     public void excluirTarefa(@PathVariable long id) {
         tarefaService.excluirTarefa(id);
