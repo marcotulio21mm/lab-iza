@@ -1,6 +1,6 @@
 package com.estudo.ToDoList.controller;
 
-import com.estudo.ToDoList.entity.Tarefa;
+import com.estudo.ToDoList.entity.*;
 import com.estudo.ToDoList.service.TarefaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,10 @@ public class TarefaController {
     public Tarefa criarTarefa(@Valid @RequestParam String titulo) {
         return tarefaService.criarTarefa(titulo);
     }
+    @PostMapping("/v2")
+    public Tarefa criarTarefaV2(@RequestBody TarefaRequest request) {
+        return tarefaService.criarTarefa(request);
+    }
 
     @PostMapping("/{id}/status/concluir")
     public Tarefa concluirTarefa(@PathVariable long id) {
@@ -32,9 +36,22 @@ public class TarefaController {
     public void excluirTarefa(@PathVariable long id) {
         tarefaService.excluirTarefa(id);
     }
-
     @GetMapping
     public List<Tarefa> retornarTodasTarefas() {
         return tarefaService.retornarTodasTarefas();
+    }
+    @GetMapping("/v2/data")
+    public List<TarefaData> retornarTarefasData() {
+        return tarefaService.retornarTarefasData();
+    }
+
+    @GetMapping("/v2/prazo")
+    public List<TarefaPrazo> retornarTarefasPrazo() {
+        return tarefaService.retornarTarefasPrazo();
+    }
+
+    @GetMapping("/v2/livre")
+    public List<TarefaLivre> retornarTarefasLivre() {
+        return tarefaService.retornarTarefasLivre();
     }
 }
