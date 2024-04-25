@@ -17,22 +17,22 @@ public class TarefaData extends Tarefa {
 
     @Column(name = "local_date", columnDefinition = "DATE")
     @Temporal(TemporalType.DATE)
-    private LocalDate dataPrevista;
+    private LocalDate dataEsperada;
 
     public TarefaData() {
     }
 
-    public TarefaData(LocalDate dataPrevista) {
-        this.dataPrevista = dataPrevista;
+    public TarefaData(LocalDate dataEsperada) {
+        this.dataEsperada = dataEsperada;
     }
 
-    public TarefaData(String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status, LocalDate dataPrevista) {
+    public TarefaData(String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status, LocalDate dataEsperada) {
         super(titulo, prioridade, tipo, status);
-        this.dataPrevista = dataPrevista;
+        this.dataEsperada = dataEsperada;
     }
 
-    public TarefaData(Long id, String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status, LocalDate dataPrevista) {
+    public TarefaData(Long id, String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status, LocalDate dataEsperada) {
         super(id, titulo, prioridade, tipo, status);
-        this.dataPrevista = dataPrevista;
+        this.dataEsperada = dataEsperada;
     }
 }

@@ -1,6 +1,10 @@
 package com.estudo.ToDoList.controller;
 
 import com.estudo.ToDoList.entity.*;
+import com.estudo.ToDoList.response.TarefaDTO;
+import com.estudo.ToDoList.response.TarefaDTOData;
+import com.estudo.ToDoList.response.TarefaDTOLivre;
+import com.estudo.ToDoList.response.TarefaDTOPrazo;
 import com.estudo.ToDoList.service.TarefaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +23,18 @@ public class TarefaController {
     public Tarefa criarTarefa(@Valid @RequestParam String titulo) {
         return tarefaService.criarTarefa(titulo);
     }
-    @PostMapping("/v2")
-    public Tarefa criarTarefaV2(@RequestBody TarefaRequest request) {
+    @PostMapping("/v2/data")
+    public Tarefa criarTarefaData(@RequestBody TarefaDTOData request) {
         return tarefaService.criarTarefa(request);
     }
-
+    @PostMapping("/v2/prazo")
+    public Tarefa criarTarefaPrazo(@RequestBody TarefaDTOPrazo request) {
+        return tarefaService.criarTarefa(request);
+    }
+    @PostMapping("/v2/livre")
+    public Tarefa criarTarefaLivre(@RequestBody TarefaDTOLivre request) {
+        return tarefaService.criarTarefa(request);
+    }
     @PostMapping("/{id}/status/concluir")
     public Tarefa concluirTarefa(@PathVariable long id) {
         return tarefaService.mudarStatus(id, true);
@@ -37,21 +48,19 @@ public class TarefaController {
         tarefaService.excluirTarefa(id);
     }
     @GetMapping
-    public List<Tarefa> retornarTodasTarefas() {
+    public List<TarefaDTO> retornarTodasTarefas() {
         return tarefaService.retornarTodasTarefas();
     }
     @GetMapping("/v2/data")
-    public List<TarefaData> retornarTarefasData() {
+    public List<TarefaDTOData> retornarTarefasData() {
         return tarefaService.retornarTarefasData();
     }
-
     @GetMapping("/v2/prazo")
-    public List<TarefaPrazo> retornarTarefasPrazo() {
+    public List<TarefaDTOPrazo> retornarTarefasPrazo() {
         return tarefaService.retornarTarefasPrazo();
     }
-
     @GetMapping("/v2/livre")
-    public List<TarefaLivre> retornarTarefasLivre() {
+    public List<TarefaDTOLivre> retornarTarefasLivre() {
         return tarefaService.retornarTarefasLivre();
     }
 }

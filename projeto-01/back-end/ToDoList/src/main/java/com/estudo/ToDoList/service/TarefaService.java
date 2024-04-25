@@ -1,23 +1,31 @@
 package com.estudo.ToDoList.service;
 
 import com.estudo.ToDoList.entity.*;
+import com.estudo.ToDoList.response.TarefaDTO;
+import com.estudo.ToDoList.response.TarefaDTOData;
+import com.estudo.ToDoList.response.TarefaDTOLivre;
+import com.estudo.ToDoList.response.TarefaDTOPrazo;
 
 import java.util.List;
 
 public interface TarefaService {
     Tarefa criarTarefa(String titulo);
 
-    Tarefa criarTarefa(TarefaRequest request);
+    Tarefa criarTarefa(TarefaDTOData request);
+
+    Tarefa criarTarefa(TarefaDTOPrazo request);
+
+    Tarefa criarTarefa(TarefaDTOLivre request);
 
     Tarefa mudarStatus(long id, boolean status);
     void excluirTarefa(long id);
-    List<Tarefa> retornarTodasTarefas();
+    List<TarefaDTO> retornarTodasTarefas();
 
-    List<TarefaData> retornarTarefasData();
+    List<TarefaDTOData> retornarTarefasData();
 
-    List<TarefaPrazo> retornarTarefasPrazo();
+    List<TarefaDTOPrazo> retornarTarefasPrazo();
 
-    List<TarefaLivre> retornarTarefasLivre();
+    List<TarefaDTOLivre> retornarTarefasLivre();
 }
 
 

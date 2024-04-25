@@ -29,8 +29,8 @@ public abstract class Tarefa {
     private Prioridade prioridade;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo",insertable=false, updatable=false)
-    private TipoTarefa tipo;
+    @Column(name = "tarefa")
+    private TipoTarefa tarefa;
 
     @Column(name = "status",nullable = false ,columnDefinition = "boolean default false")
     private Boolean status;
@@ -39,18 +39,18 @@ public abstract class Tarefa {
 
     }
 
-    public Tarefa(String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status) {
+    public Tarefa(String titulo, Prioridade prioridade, TipoTarefa tarefa, Boolean status) {
         this.titulo = titulo;
         this.prioridade = prioridade;
-        this.tipo = tipo;
+        this.tarefa = tarefa;
         this.status = status;
     }
 
-    public Tarefa(Long id, String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status) {
+    public Tarefa(Long id, String titulo, Prioridade prioridade, TipoTarefa tarefa, Boolean status) {
         this.id = id;
         this.titulo = titulo;
         this.prioridade = prioridade;
-        this.tipo = tipo;
+        this.tarefa = tarefa;
         this.status = status;
     }
 }
