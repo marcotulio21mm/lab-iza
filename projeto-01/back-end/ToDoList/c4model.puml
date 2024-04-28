@@ -1,0 +1,28 @@
+@startuml TarefaAPI_Overview
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/java.puml
+!include FONTAWESOME/users.puml
+!include DEVICONS/postgresql.puml
+
+System_Boundary(tarefaApiBoundary, "Tarefa API") {
+    Container(tarefaController, "TarefaController", "Spring Boot Java MVC", "Recebe requisições HTTP e gerencia as operações das tarefas")
+    Container(tarefaService, "TarefaService", "Spring Boot Java", "Implementa a lógica de negócio das tarefas e interage com o banco de dados")
+    Container(tarefaRepository, "TarefaRepository", "Spring Data JPA", "Realiza operações de acesso ao banco de dados PostgreSQL")
+
+    Rel(tarefaController, tarefaService, "Invoca", "HTTP")
+    Rel(tarefaService, tarefaRepository, "Utiliza", "JPA")
+}
+
+ContainerDb(postgres, "Database", "Postgress", "Banco de Dados Relacional", $sprite="postgresql")
+
+
+Rel(tarefaRepository, postgres, "Acessa", "JDBC")
+
+Person(customer, "Customer", "Usuário que interage com a Tarefa API")
+
+Rel(customer, tarefaController, "Usa", "HTTP")
+
+@enduml

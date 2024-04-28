@@ -24,15 +24,15 @@ public class TarefaController {
         return tarefaService.criarTarefa(titulo);
     }
     @PostMapping("/v2/data")
-    public Tarefa criarTarefaData(@RequestBody TarefaDTOData request) {
+    public Tarefa criarTarefa(@RequestBody TarefaDTOData request) {
         return tarefaService.criarTarefa(request);
     }
     @PostMapping("/v2/prazo")
-    public Tarefa criarTarefaPrazo(@RequestBody TarefaDTOPrazo request) {
+    public Tarefa criarTarefa(@RequestBody TarefaDTOPrazo request) {
         return tarefaService.criarTarefa(request);
     }
     @PostMapping("/v2/livre")
-    public Tarefa criarTarefaLivre(@RequestBody TarefaDTOLivre request) {
+    public Tarefa criarTarefa(@RequestBody TarefaDTOLivre request) {
         return tarefaService.criarTarefa(request);
     }
     @PostMapping("/{id}/status/concluir")

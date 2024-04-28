@@ -1,0 +1,96 @@
+@startuml TarefaAPI_Specification
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/java.puml
+!include FONTAWESOME/users.puml
+!include DEVICONS/postgresql.puml
+
+AddElementTag("v1.0", $borderColor="#d73027")
+AddRelTag("v1", $lineColor="#d73027")
+AddRelTag("v2", $lineColor="#d73027")
+SetPropertyHeader("Parametro","Retorno")
+System_Boundary(tarefaApiBoundary, "Tarefa API") {
+
+
+    Container(tarefaController, "TarefaController", "Spring Boot Java MVC", "Recebe requisições HTTP e gerencia as operações das tarefas") {
+        Component criarTarefa
+        Component criarTarefaV2
+        Component concluirTarefa
+        Component desconcluirTarefa
+        Component excluirTarefa
+        Component retornarTodasTarefas
+        Component retornarTarefasData
+        Component retornarTarefasPrazo
+        Component retornarTarefasLivre
+    }
+
+    Container(tarefaService, "TarefaService", "Spring Boot Java", "Implementa a lógica de negócio das tarefas e interage com o banco de dados") {
+        Component criarTarefaService
+        Component criarTarefaServiceV2
+
+        Component mudarStatusService
+        Component excluirTarefaService
+        Component retornarTodasTarefasService
+        Component retornarTarefasDataService
+        Component retornarTarefasPrazoService
+        Component retornarTarefasLivreService
+    }
+
+    Container(tarefaRepository, "TarefaRepository", "Spring Data JPA", "Realiza operações de acesso ao banco de dados PostgreSQL") {
+        Component findByTarefaData
+        Component findByTarefaPrazo
+        Component findByLivre
+    }
+    AddProperty("TarefaDTOData", "Tarefa")
+    AddProperty("TarefaDTOPrazo", "Tarefa")
+    AddProperty("TarefaDTOLivre", "Tarefa")
+    Rel(criarTarefaV2, criarTarefaServiceV2, "Invoca", "HTTP", $tags="v2")
+    AddProperty("String", "Tarefa")
+    Rel(criarTarefa, criarTarefaService, "Invoca", "HTTP")
+    AddProperty("long", "boolean")
+    Rel(concluirTarefa, mudarStatusService, "Invoca", "HTTP")
+    AddProperty("long", "boolean")
+    Rel(desconcluirTarefa, mudarStatusService, "Invoca", "HTTP")
+    AddProperty("long", "void")
+    Rel(excluirTarefa, excluirTarefaService, "Invoca", "HTTP")
+    AddProperty("", "List<TarefaDTO>")
+    Rel(retornarTodasTarefas, retornarTodasTarefasService, "Invoca", "HTTP")
+    AddProperty("", "List<TarefaDTOData>")
+    Rel(retornarTarefasData, retornarTarefasDataService, "Invoca", "HTTP", $tags="v2")
+    AddProperty("", "List<TarefaDTOPrazo>")
+    Rel(retornarTarefasPrazo, retornarTarefasPrazoService, "Invoca", "HTTP", $tags="v2")
+    AddProperty("", "List<TarefaDTOLivre>")
+    Rel(retornarTarefasLivre, retornarTarefasLivreService, "Invoca", "HTTP", $tags="v2")
+
+    AddProperty("Tarefa", "Tarefa")
+    Rel(criarTarefaService, tarefaRepository, "Utiliza", "JPA")
+    AddProperty("Tarefa", "Tarefa")
+    Rel(criarTarefaServiceV2, tarefaRepository, "Utiliza", "JPA")
+    AddProperty("Tarefa", "Tarefa")
+    Rel(mudarStatusService, tarefaRepository, "Utiliza", "JPA")
+    AddProperty("long", "")
+    Rel(excluirTarefaService, tarefaRepository, "Utiliza", "JPA")
+
+    Rel(retornarTodasTarefasService, retornarTarefasDataService, "Utiliza", "JPA")
+    Rel(retornarTodasTarefasService, retornarTarefasLivreService, "Utiliza", "JPA")
+    Rel(retornarTodasTarefasService, retornarTarefasPrazoService, "Utiliza", "JPA")
+
+    AddProperty("TipoTarefa.DATA", "List<TarefaData> ")
+    Rel(retornarTarefasDataService, findByTarefaData, "Utiliza", "JPA")
+    AddProperty("TipoTarefa.PRAZO", "List<TarefaPrazo> ")
+    Rel(retornarTarefasPrazoService, findByTarefaPrazo, "Utiliza", "JPA")
+    AddProperty("TipoTarefa.LIVRE", "List<TarefaLivre> ")
+    Rel(retornarTarefasLivreService, findByLivre, "Utiliza", "JPA")
+}
+
+ContainerDb(postgres, "Database", "Postgress", "Banco de Dados Relacional", $sprite="postgresql")
+Rel(tarefaRepository, postgres, "Acessa", "JDBC")
+
+Person(customer, "Cliente", "Usuário que interage com a Tarefa API")
+
+Rel(customer, tarefaController, "Usa", "HTTP")
+
+SHOW_LEGEND()
+@enduml
