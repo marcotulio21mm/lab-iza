@@ -1,5 +1,5 @@
 # Definindo a imagem base como Ubuntu
-FROM ubuntu:latest
+FROM ubuntu:latest AS build
 
 # Atualizando o ambiente
 RUN apt-get update -y && apt-get upgrade -y
@@ -8,13 +8,13 @@ RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y openjdk-17-jdk
 
 # Copiando o código fonte para o container
-COPY . /app
+COPY . .
 
 # Instalando o Maven
 RUN apt-get install -y maven
 
 # Solicitando a geração do arquivo JAR com o Maven
-RUN mvn -f /app/pom.xml clean install
+RUN mvn clean install
 
 # Escolhendo a imagem que executará a aplicação
 FROM openjdk:17-jdk-slim
@@ -23,7 +23,7 @@ FROM openjdk:17-jdk-slim
 EXPOSE 8080
 
 # Copiando o arquivo JAR para execução
-COPY --from=0 /app/target/*.jar /app/app.jar
+COPY --from=build target/*.jar app.jar
 
 # Executando o arquivo JAR
 CMD ["java", "-jar", "/app/app.jar"]
