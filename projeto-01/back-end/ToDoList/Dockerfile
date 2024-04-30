@@ -14,7 +14,7 @@ COPY . .
 RUN apt-get install -y maven
 
 # Solicitando a geração do arquivo JAR com o Maven
-RUN mvn clean install
+RUN mvn clean install -e
 
 # Escolhendo a imagem que executará a aplicação
 FROM openjdk:17-jdk-slim
