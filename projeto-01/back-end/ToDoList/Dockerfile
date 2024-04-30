@@ -17,7 +17,7 @@ RUN apt-get install -y maven
 RUN mvn -f /app/pom.xml clean package
 
 # Escolhendo a imagem que executará a aplicação
-FROM openjdk:17-jre-slim
+FROM openjdk:17-jdk-slim
 
 # Expondo a porta 8080 para acesso externo
 EXPOSE 8080
