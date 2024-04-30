@@ -5,7 +5,7 @@ FROM ubuntu:latest
 RUN apt-get update -y && apt-get upgrade -y
 
 # Instalando o OpenJDK
-RUN apt-get install -y openjdk-11-jdk
+RUN apt-get install -y openjdk-17-jdk
 
 # Copiando o código fonte para o container
 COPY . /app
