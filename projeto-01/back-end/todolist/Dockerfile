@@ -1,6 +1,13 @@
 # Definindo a imagem base como Ubuntu
 FROM ubuntu:latest AS build
 
+# Definindo variáveis de ambiente
+ENV URL postgres://postgresroot:55AHPbYzwofEmC3XVcNkRydXhg39uRUz@dpg-coon71e3e1ms73b945v0-a/todolistdb_qwal
+ENV PORT 5432
+ENV POSTGRES_DB todolistdb_qwal
+ENV POSTGRES_USER postgresroot
+ENV POSTGRES_PASSWORD 55AHPbYzwofEmC3XVcNkRydXhg39uRUz
+
 # Atualizando o ambiente
 RUN apt-get update -y && apt-get upgrade -y
 
