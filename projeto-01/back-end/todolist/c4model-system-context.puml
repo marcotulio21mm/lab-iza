@@ -1,0 +1,17 @@
+@startuml TarefaAPI_Overview
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+AddElementTag("v1.0", $borderColor="#d73027")
+AddElementTag("v1.1", $fontColor="#d73027")
+AddElementTag("backup", $fontColor="orange")
+
+AddRelTag("backup", $textColor="orange", $lineColor="orange", $lineStyle = DashedLine())
+
+Person(user, "Customer", "Usuário que interage com a Tarefa API")
+Container(spa, "Tarefa API", "System", "Sistema que recebe requisições HTTP e gerencia as operações das tarefas")
+
+Rel(user, spa, "Uses", "https")
+
+
+SHOW_LEGEND()
+@enduml

@@ -1,4 +1,4 @@
-@startuml TarefaAPI_Overview
+@startuml TarefaAPI_Container
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
@@ -14,12 +14,10 @@ System_Boundary(tarefaApiBoundary, "Tarefa API") {
 
     Rel(tarefaController, tarefaService, "Invoca", "HTTP")
     Rel(tarefaService, tarefaRepository, "Utiliza", "JPA")
+    ContainerDb(postgres, "Database", "Postgress", "Banco de Dados Relacional", $sprite="postgresql")
+    Rel(tarefaRepository, postgres, "Acessa", "JDBC")
+
 }
-
-ContainerDb(postgres, "Database", "Postgress", "Banco de Dados Relacional", $sprite="postgresql")
-
-
-Rel(tarefaRepository, postgres, "Acessa", "JDBC")
 
 Person(customer, "Customer", "Usuário que interage com a Tarefa API")
 
