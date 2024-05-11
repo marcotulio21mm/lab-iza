@@ -3,6 +3,9 @@ package com.estudo.ToDoList.service;
 import com.estudo.ToDoList.entity.*;
 import com.estudo.ToDoList.enums.Prioridade;
 import com.estudo.ToDoList.enums.TipoTarefa;
+import com.estudo.ToDoList.exception.DataInvalidaException;
+import com.estudo.ToDoList.exception.TarefaNotFoundException;
+import com.estudo.ToDoList.exception.TituloInvalidoException;
 import com.estudo.ToDoList.repository.TarefaRepository;
 import com.estudo.ToDoList.response.TarefaDTO;
 import com.estudo.ToDoList.response.TarefaDTOData;
@@ -25,25 +28,36 @@ public class TarefaServiceImpl implements TarefaService {
 
     @Override
     public Tarefa criarTarefa(String titulo) {
+        verificaTitulo(titulo);
         Tarefa tarefa = new TarefaLivre(titulo, Prioridade.BAIXA, TipoTarefa.LIVRE, false);
         return tarefaRepository.save(tarefa);
     }
+
+    private void verificaTitulo(String titulo) {
+        if(titulo == null || titulo.trim().isEmpty()){
+            throw  new TituloInvalidoException("Título não pode ser vazio");
+        }
+    }
+
     @Override
     public Tarefa criarTarefa(TarefaDTOData request) {
+        verificaTitulo(request.getTitulo());
         if (request.getDataEsperada().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("A data prevista deve ser igual ou superior à data atual.");
+            throw new DataInvalidaException("A data prevista deve ser igual ou superior à data atual.");
         }
         Tarefa tarefa = new TarefaData(request.getTitulo(), request.getPrioridade(), request.getTarefa(), request.getStatus(), request.getDataEsperada());
         return tarefaRepository.save(tarefa);
     }
     @Override
     public Tarefa criarTarefa(TarefaDTOPrazo request) {
+        verificaTitulo(request.getTitulo());
         LocalDate dataPrevista = LocalDate.now().plusDays(request.getDiasPrevisto());
         Tarefa tarefa = new TarefaData(request.getTitulo(), request.getPrioridade(), request.getTarefa(), request.getStatus(), dataPrevista);
         return tarefaRepository.save(tarefa);
     }
     @Override
     public Tarefa criarTarefa(TarefaDTOLivre request) {
+        verificaTitulo(request.getTitulo());
         Tarefa tarefa = new TarefaLivre(request.getTitulo(), request.getPrioridade(), request.getTarefa(), request.getStatus());
         return tarefaRepository.save(tarefa);
     }
@@ -59,7 +73,12 @@ public class TarefaServiceImpl implements TarefaService {
 
     @Override
     public void excluirTarefa(long id) {
-        tarefaRepository.deleteById(id);
+        Optional<Tarefa> tarefaOptional = tarefaRepository.findById(id);
+        if (tarefaOptional.isPresent()) {
+            tarefaRepository.deleteById(id);
+        } else {
+            throw new TarefaNotFoundException("A tarefa com o ID " + id + " não foi encontrada.");
+        }
     }
 
     @Override

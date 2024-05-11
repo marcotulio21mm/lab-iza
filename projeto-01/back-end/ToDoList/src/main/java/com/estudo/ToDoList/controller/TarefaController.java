@@ -1,6 +1,9 @@
 package com.estudo.ToDoList.controller;
 
 import com.estudo.ToDoList.entity.*;
+import com.estudo.ToDoList.exception.DataInvalidaException;
+import com.estudo.ToDoList.exception.TarefaNotFoundException;
+import com.estudo.ToDoList.exception.TituloInvalidoException;
 import com.estudo.ToDoList.response.TarefaDTO;
 import com.estudo.ToDoList.response.TarefaDTOData;
 import com.estudo.ToDoList.response.TarefaDTOLivre;
@@ -8,7 +11,10 @@ import com.estudo.ToDoList.response.TarefaDTOPrazo;
 import com.estudo.ToDoList.service.TarefaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,32 +26,53 @@ public class TarefaController {
     private TarefaService tarefaService;
 
     @PostMapping
-    public Tarefa criarTarefa(@Valid @RequestParam String titulo) {
-        return tarefaService.criarTarefa(titulo);
+    public ResponseEntity<Object> criarTarefa(@Valid @RequestParam String titulo) {
+        try {
+            return ResponseEntity.ok(tarefaService.criarTarefa(titulo));
+        }catch (TituloInvalidoException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
     @PostMapping("/v2/data")
-    public Tarefa criarTarefa(@RequestBody TarefaDTOData request) {
-        return tarefaService.criarTarefa(request);
+    public ResponseEntity<Object> criarTarefa(@RequestBody TarefaDTOData request) {
+        try {
+            return ResponseEntity.ok(tarefaService.criarTarefa(request));
+        }catch (TituloInvalidoException | DataInvalidaException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
     @PostMapping("/v2/prazo")
-    public Tarefa criarTarefa(@RequestBody TarefaDTOPrazo request) {
-        return tarefaService.criarTarefa(request);
+    public ResponseEntity<Object> criarTarefa(@RequestBody TarefaDTOPrazo request) {
+        try {
+            return ResponseEntity.ok(tarefaService.criarTarefa(request));
+        }catch (TituloInvalidoException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
     @PostMapping("/v2/livre")
-    public Tarefa criarTarefa(@RequestBody TarefaDTOLivre request) {
-        return tarefaService.criarTarefa(request);
+    public ResponseEntity<Object> criarTarefa(@RequestBody TarefaDTOLivre request) {
+        try {
+            return ResponseEntity.ok(tarefaService.criarTarefa(request));
+        }catch (TituloInvalidoException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
     @PostMapping("/{id}/status/concluir")
-    public Tarefa concluirTarefa(@PathVariable long id) {
-        return tarefaService.mudarStatus(id, true);
+    public ResponseEntity<Tarefa> concluirTarefa(@PathVariable long id) {
+        return ResponseEntity.ok(tarefaService.mudarStatus(id, true));
     }
     @PostMapping("/{id}/status/desconcluir")
-    public Tarefa desconcluirTarefa(@PathVariable long id) {
-        return tarefaService.mudarStatus(id, false);
+    public ResponseEntity<Tarefa> desconcluirTarefa(@PathVariable long id) {
+        return ResponseEntity.ok(tarefaService.mudarStatus(id, false));
     }
     @DeleteMapping("/{id}")
-    public void excluirTarefa(@PathVariable long id) {
-        tarefaService.excluirTarefa(id);
+    public ResponseEntity<String> excluirTarefa(@PathVariable long id) {
+        try {
+            tarefaService.excluirTarefa(id);
+            return ResponseEntity.ok("Tarefa com ID " + id + " excluída com sucesso.");
+        } catch (TarefaNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
     @GetMapping
     public List<TarefaDTO> retornarTodasTarefas() {

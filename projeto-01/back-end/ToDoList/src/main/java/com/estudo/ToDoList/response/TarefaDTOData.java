@@ -23,5 +23,4 @@ public class TarefaDTOData extends TarefaDTO {
         this.dataEsperada = dataEsperada;
     }
 
-
 }
