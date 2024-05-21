@@ -1,0 +1,55 @@
+@startuml
+title Diagrama de Sequência - Retornar Todas as Tarefas
+
+actor Usuário
+Boundary Frontend
+Boundary SpringBoot
+Control TarefaController
+Participant TarefaService
+Participant TarefaRepository
+Entity Tarefa
+Database TodoList
+
+Usuário -> Frontend: Acessa a página de tarefas
+activate Usuário
+activate Frontend
+
+Frontend -> SpringBoot: GET /tarefas
+activate SpringBoot
+
+SpringBoot -> TarefaController: retornarTodasTarefas()
+activate TarefaController
+
+TarefaController -> TarefaService: retornarTodasTarefas()
+activate TarefaService
+
+TarefaService -> TarefaRepository: findAll()
+activate TarefaRepository
+
+TarefaRepository -> TodoList: SELECT * FROM Tasks
+TodoList --> TarefaRepository: Lista de Tarefas
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Lista de Tarefas
+deactivate TarefaService
+
+TarefaService --> TarefaController: Lista de Tarefas
+deactivate TarefaController
+
+TarefaController --> SpringBoot: Lista de Tarefas
+deactivate SpringBoot
+
+SpringBoot --> Frontend: Lista de Tarefas
+deactivate Frontend
+
+Frontend --> Usuário: Exibe a lista de tarefas
+deactivate Usuário
+
+note right of TarefaController
+if (nenhuma tarefa) {
+  TarefaController --> SpringBoot: []
+  SpringBoot --> Frontend: []
+  Frontend --> Usuário: Exibe mensagem "Nenhuma tarefa encontrada"
+}
+end note
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title Diagrama de Sequência - Concluir Tarefa
+
+actor Usuário
+Boundary Frontend
+Boundary SpringBoot
+Control TarefaController
+Participant TarefaService
+Participant TarefaRepository
+Entity Tarefa
+Database TodoList
+
+Usuário -> Frontend: Clica no ícone de concluir tarefa
+activate Usuário
+activate Frontend
+
+Frontend -> SpringBoot: POST /tarefas/{id}/status/concluir
+activate SpringBoot
+
+SpringBoot -> TarefaController: concluirTarefa(id)
+activate TarefaController
+
+TarefaController -> TarefaService: mudarStatus(id, true)
+activate TarefaService
+
+TarefaService -> TarefaRepository: findById(id)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: SELECT * FROM Tasks WHERE id = ?
+TodoList --> TarefaRepository: Tarefa encontrada
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Tarefa encontrada
+
+TarefaService -> Tarefa: setStatus(true)
+TarefaService -> TarefaRepository: save(Tarefa)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: UPDATE Tasks SET status = true WHERE id = ?
+TodoList --> TarefaRepository: Tarefa atualizada
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Tarefa atualizada
+deactivate TarefaService
+
+TarefaService --> TarefaController: Tarefa atualizada
+deactivate TarefaController
+
+TarefaController --> SpringBoot: ResponseEntity.ok(Tarefa)
+deactivate SpringBoot
+
+SpringBoot --> Frontend: ResponseEntity.ok(Tarefa)
+deactivate Frontend
+
+Frontend --> Usuário: Exibe tarefa como concluída
+deactivate Usuário
+@enduml

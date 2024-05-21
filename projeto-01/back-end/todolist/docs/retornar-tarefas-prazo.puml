@@ -1,0 +1,55 @@
+@startuml
+title Diagrama de Sequência - Retornar Tarefas por Prazo
+
+actor Usuário
+Boundary Frontend
+Boundary SpringBoot
+Control TarefaController
+Participant TarefaService
+Participant TarefaRepository
+Entity TarefaPrazo
+Database TodoList
+
+Usuário -> Frontend: Acessa a página de tarefas por prazo
+activate Usuário
+activate Frontend
+
+Frontend -> SpringBoot: GET /tarefas/v2/prazo
+activate SpringBoot
+
+SpringBoot -> TarefaController: retornarTarefasPrazo()
+activate TarefaController
+
+TarefaController -> TarefaService: retornarTarefasPrazo()
+activate TarefaService
+
+TarefaService -> TarefaRepository: findByTarefaPrazo(TipoTarefa.PRAZO)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: SELECT * FROM Tasks WHERE tarefa = 'PRAZO'
+TodoList --> TarefaRepository: Lista de Tarefas por Prazo
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Lista de Tarefas por Prazo
+deactivate TarefaService
+
+TarefaService --> TarefaController: Lista de Tarefas por Prazo
+deactivate TarefaController
+
+TarefaController --> SpringBoot: Lista de Tarefas por Prazo
+deactivate SpringBoot
+
+SpringBoot --> Frontend: Lista de Tarefas por Prazo
+deactivate Frontend
+
+Frontend --> Usuário: Exibe a lista de tarefas por prazo
+deactivate Usuário
+
+note right of TarefaController
+if (nenhuma tarefa) {
+  TarefaController --> SpringBoot: []
+  SpringBoot --> Frontend: []
+  Frontend --> Usuário: Exibe mensagem "Nenhuma tarefa encontrada"
+}
+end note
+@enduml

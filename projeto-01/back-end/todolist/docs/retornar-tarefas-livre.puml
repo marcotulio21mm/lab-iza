@@ -1,0 +1,55 @@
+@startuml
+title Diagrama de Sequência - Retornar Tarefas Livres
+
+actor Usuário
+Boundary Frontend
+Boundary SpringBoot
+Control TarefaController
+Participant TarefaService
+Participant TarefaRepository
+Entity TarefaLivre
+Database TodoList
+
+Usuário -> Frontend: Acessa a página de tarefas livres
+activate Usuário
+activate Frontend
+
+Frontend -> SpringBoot: GET /tarefas/v2/livre
+activate SpringBoot
+
+SpringBoot -> TarefaController: retornarTarefasLivre()
+activate TarefaController
+
+TarefaController -> TarefaService: retornarTarefasLivre()
+activate TarefaService
+
+TarefaService -> TarefaRepository: findByLivre(TipoTarefa.LIVRE)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: SELECT * FROM Tasks WHERE tarefa = 'LIVRE'
+TodoList --> TarefaRepository: Lista de Tarefas Livres
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Lista de Tarefas Livres
+deactivate TarefaService
+
+TarefaService --> TarefaController: Lista de Tarefas Livres
+deactivate TarefaController
+
+TarefaController --> SpringBoot: Lista de Tarefas Livres
+deactivate SpringBoot
+
+SpringBoot --> Frontend: Lista de Tarefas Livres
+deactivate Frontend
+
+Frontend --> Usuário: Exibe a lista de tarefas livres
+deactivate Usuário
+
+note right of TarefaController
+if (nenhuma tarefa) {
+  TarefaController --> SpringBoot: []
+  SpringBoot --> Frontend: []
+  Frontend --> Usuário: Exibe mensagem "Nenhuma tarefa encontrada"
+}
+end note
+@enduml

@@ -1,0 +1,63 @@
+@startuml
+title Diagrama de Sequência - Excluir Tarefa
+
+actor Usuário
+Boundary Frontend
+Boundary SpringBoot
+Control TarefaController
+Participant TarefaService
+Participant TarefaRepository
+Database TodoList
+
+Usuário -> Frontend: Clica no ícone de excluir tarefa
+activate Usuário
+activate Frontend
+
+Frontend -> SpringBoot: DELETE /tarefas/{id}
+activate SpringBoot
+
+SpringBoot -> TarefaController: excluirTarefa(id)
+activate TarefaController
+
+TarefaController -> TarefaService: excluirTarefa(id)
+activate TarefaService
+
+TarefaService -> TarefaRepository: findById(id)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: SELECT * FROM Tasks WHERE id = ?
+TodoList --> TarefaRepository: Tarefa encontrada
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Tarefa encontrada
+
+TarefaService -> TarefaRepository: deleteById(id)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: DELETE FROM Tasks WHERE id = ?
+TodoList --> TarefaRepository: Tarefa excluída
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Tarefa excluída
+deactivate TarefaService
+
+TarefaService --> TarefaController: Tarefa excluída
+deactivate TarefaController
+
+TarefaController --> SpringBoot: ResponseEntity.ok("Tarefa com ID " + id + " excluída com sucesso.")
+deactivate SpringBoot
+
+SpringBoot --> Frontend: ResponseEntity.ok("Tarefa com ID " + id + " excluída com sucesso.")
+deactivate Frontend
+
+Frontend --> Usuário: Exibe mensagem de sucesso
+deactivate Usuário
+
+note right of TarefaController
+if (TarefaNotFoundException) {
+  TarefaController --> SpringBoot: ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage())
+  SpringBoot --> Frontend: ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage())
+  Frontend --> Usuário: Exibe mensagem de erro
+}
+end note
+@enduml

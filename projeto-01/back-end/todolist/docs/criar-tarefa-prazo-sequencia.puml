@@ -1,0 +1,50 @@
+@startuml
+title Diagrama de Sequência - Criar Tarefa com Prazo
+
+actor Usuário
+Boundary Frontend
+Boundary SpringBoot
+Control TarefaController
+Entity Tarefa
+Participant TarefaService
+Participant TarefaRepository
+Database TodoList
+
+Usuário -> Frontend: Preenche campo 'Título' e 'Prazo'
+activate Usuário
+activate Frontend
+
+Usuário -> Frontend: Clica no botão 'Adicionar Tarefa'
+activate TodoList
+
+Frontend -> SpringBoot: POST /tarefas/v2/prazo
+activate SpringBoot
+
+SpringBoot -> TarefaController: criarTarefa(request)
+activate TarefaController
+
+TarefaController -> TarefaService: criarTarefa(request)
+activate TarefaService
+
+TarefaService -> TarefaRepository: save(Tarefa)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: INSERT INTO Tasks
+TodoList --> TarefaRepository: Tarefa salva
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Tarefa salva
+deactivate TarefaService
+
+TarefaService --> TarefaController: Tarefa salva
+deactivate TarefaController
+
+TarefaController --> SpringBoot: ResponseEntity.ok(Tarefa)
+deactivate SpringBoot
+
+SpringBoot --> Frontend: ResponseEntity.ok(Tarefa)
+deactivate Frontend
+
+Frontend --> Usuário: Exibe Tarefa criada
+deactivate Usuário
+@enduml

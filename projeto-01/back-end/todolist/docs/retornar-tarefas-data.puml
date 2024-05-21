@@ -1,0 +1,55 @@
+@startuml
+title Diagrama de Sequência - Retornar Tarefas por Data
+
+actor Usuário
+Boundary Frontend
+Boundary SpringBoot
+Control TarefaController
+Participant TarefaService
+Participant TarefaRepository
+Entity TarefaData
+Database TodoList
+
+Usuário -> Frontend: Acessa a página de tarefas por data
+activate Usuário
+activate Frontend
+
+Frontend -> SpringBoot: GET /tarefas/v2/data
+activate SpringBoot
+
+SpringBoot -> TarefaController: retornarTarefasData()
+activate TarefaController
+
+TarefaController -> TarefaService: retornarTarefasData()
+activate TarefaService
+
+TarefaService -> TarefaRepository: findByTarefaData(TipoTarefa.DATA)
+activate TarefaRepository
+
+TarefaRepository -> TodoList: SELECT * FROM Tasks WHERE tarefa = 'DATA'
+TodoList --> TarefaRepository: Lista de Tarefas por Data
+deactivate TarefaRepository
+
+TarefaRepository --> TarefaService: Lista de Tarefas por Data
+deactivate TarefaService
+
+TarefaService --> TarefaController: Lista de Tarefas por Data
+deactivate TarefaController
+
+TarefaController --> SpringBoot: Lista de Tarefas por Data
+deactivate SpringBoot
+
+SpringBoot --> Frontend: Lista de Tarefas por Data
+deactivate Frontend
+
+Frontend --> Usuário: Exibe a lista de tarefas por data
+deactivate Usuário
+
+note right of TarefaController
+if (nenhuma tarefa) {
+  TarefaController --> SpringBoot: []
+  SpringBoot --> Frontend: []
+  Frontend --> Usuário: Exibe mensagem "Nenhuma tarefa encontrada"
+}
+end note
+@enduml
