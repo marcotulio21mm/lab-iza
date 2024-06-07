@@ -5,18 +5,16 @@ import {
     Grid,
     InputLabel,
     MenuItem, Paper,
-    Table, TableBody,
-    TableContainer,
-    TableHead, TableRow,
     TextField,
-    TableCell, Container
+    Container
 } from "@mui/material";
 import Select from '@mui/material/Select';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { DataGrid } from '@mui/x-data-grid';
 
 function App() {
-    const [age, setAge] = React.useState('');
+    const [age, setAge] = useState('');
     const [rows, setRows] = useState([]);
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -31,10 +29,14 @@ function App() {
                 console.error('There was an error fetching the data!', error);
             });
     }, []);
-    console.log(rows)
-    function createData(name, calories, fat, carbs, protein) {
-        return { name, calories, fat, carbs, protein };
-    }
+    console.log(rows);
+
+    const columns = [
+        { field: 'titulo', headerName: 'Título', width: 200 },
+        { field: 'prioridade', headerName: 'Prioridade', width: 150 },
+        { field: 'status', headerName: 'Status', width: 150 },
+        { field: 'tipo', headerName: 'Tipo', width: 150 },
+    ];
 
     return (
         <div className="App">
@@ -65,42 +67,19 @@ function App() {
                 </Grid>
             </Grid>
             <Container sx={{ marginTop: "2rem" }}>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="right">Titulo</TableCell>
-                                <TableCell align="right">Prioridade&nbsp;(g)</TableCell>
-                                <TableCell align="right">Status&nbsp;(g)</TableCell>
-                                <TableCell align="right">Tipo&nbsp;(g)</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <DataGrid
-                                rows={rows}
-                                columns={columns}
-                                initialState={{
-                                    pagination: {
-                                        paginationModel: { page: 0, pageSize: 5 },
-                                    },
-                                }}
-                                pageSizeOptions={[5, 10]}
-                                checkboxSelection
-                            />
-                            {/* {rows.map((row) => (
-                                <TableRow
-                                    key={row.name}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell align="right">{row.titulo}</TableCell>
-                                    <TableCell align="right">{row.prioridade}</TableCell>
-                                    <TableCell align="right">{row.status}</TableCell>
-                                    <TableCell align="right">{row.tarefa}</TableCell>
-                                </TableRow>
-                            ))} */}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <Paper style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        initialState={{
+                            pagination: {
+                                paginationModel: { page: 0, pageSize: 5 },
+                            },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                        checkboxSelection
+                    />
+                </Paper>
             </Container>
         </div>
     );
