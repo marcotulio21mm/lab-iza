@@ -11,9 +11,10 @@ import {
     TextField,
     TableCell, Container
 } from "@mui/material";
-import Select  from '@mui/material/Select';
-import React, {useEffect, useState} from "react";
+import Select from '@mui/material/Select';
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { DataGrid } from '@mui/x-data-grid';
 
 function App() {
     const [age, setAge] = React.useState('');
@@ -39,7 +40,7 @@ function App() {
     return (
         <div className="App">
             <h1>Lista de Tarefas</h1>
-            <Grid container md={4} spacing={2} sx={{marginLeft:"auto",marginRight:"auto", marginTop:"auto"}}>
+            <Grid container md={4} spacing={2} sx={{ marginLeft: "auto", marginRight: "auto", marginTop: "auto" }}>
                 <Grid item xs={8}>
                     <TextField id="outlined-basic" label="Título" variant="outlined" />
                 </Grid>
@@ -64,29 +65,40 @@ function App() {
                     </FormControl>
                 </Grid>
             </Grid>
-            <Container sx={{marginTop:"2rem"}}>
+            <Container sx={{ marginTop: "2rem" }}>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell align="right">Titulo</TableCell>
-                                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                                <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                                <TableCell align="right">Prioridade&nbsp;(g)</TableCell>
+                                <TableCell align="right">Status&nbsp;(g)</TableCell>
+                                <TableCell align="right">Tipo&nbsp;(g)</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: { page: 0, pageSize: 5 },
+                                    },
+                                }}
+                                pageSizeOptions={[5, 10]}
+                                checkboxSelection
+                            />
+                            {/* {rows.map((row) => (
                                 <TableRow
                                     key={row.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell align="right">{row.titulo}</TableCell>
-                                    <TableCell align="right">{row.fat}</TableCell>
-                                    <TableCell align="right">{row.carbs}</TableCell>
-                                    <TableCell align="right">{row.protein}</TableCell>
+                                    <TableCell align="right">{row.prioridade}</TableCell>
+                                    <TableCell align="right">{row.status}</TableCell>
+                                    <TableCell align="right">{row.tarefa}</TableCell>
                                 </TableRow>
-                            ))}
+                            ))} */}
                         </TableBody>
                     </Table>
                 </TableContainer>
