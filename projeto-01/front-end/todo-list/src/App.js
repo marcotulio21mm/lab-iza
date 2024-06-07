@@ -14,7 +14,6 @@ import {
 import Select from '@mui/material/Select';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { DataGrid } from '@mui/x-data-grid';
 
 function App() {
     const [age, setAge] = React.useState('');
