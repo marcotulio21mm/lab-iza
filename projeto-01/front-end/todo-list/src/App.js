@@ -26,6 +26,7 @@ import Select from '@mui/material/Select';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import dayjs from 'dayjs';
 
 function App() {
     const [age, setAge] = useState('LIVRE');
@@ -115,7 +116,7 @@ function App() {
         }
     };
 
-    const handleAddTask = () => {
+    const handleAddTarefa = () => {
         let endpoint = 'http://localhost:8080/tarefas/v2/livre';
         const newTask = { titulo: title, tarefa: age, prioridade: priority, status: false };
 
@@ -139,13 +140,24 @@ function App() {
             .catch(error => {
                 console.error('Erro ao adicionar tarefa!', error);
             });
+        window.location.reload()
+    };
+
+    const calculateDeliveryDate = (task) => {
+        if (task.tarefa === 'PRAZO') {
+            return dayjs().add(task.diasPrevisto, 'day').format('YYYY-MM-DD');
+        } else if (task.tarefa === 'DATA') {
+            return task.dataEsperada;
+        } else {
+            return 'N/A';
+        }
     };
 
     return (
-        <div className="App" sx={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+        <div className="App" sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <h1>Lista de Tarefas</h1>
-            <Grid container md={12} spacing={1} sx={{  width: "80%", display: "flex", marginLeft: "auto", marginRight: "auto", marginTop: "auto" }}>
-                <Grid item xs={3} sx={{marginLeft: "2rem"}}>
+            <Grid container md={12} spacing={1} sx={{ width: "80%", display: "flex", marginLeft: "auto", marginRight: "auto", marginTop: "auto" }}>
+                <Grid item xs={3} sx={{ marginLeft: "2rem" }}>
                     <TextField
                         id="outlined-basic"
                         label="Título"
@@ -193,8 +205,8 @@ function App() {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={2} fullWidth sx={{textAlign: "center"}}>
-                    <Button variant="contained" onClick={handleAddTask}>+</Button>
+                <Grid item xs={2} fullWidth sx={{ textAlign: "center" }}>
+                    <Button variant="contained" onClick={handleAddTarefa}>+</Button>
                 </Grid>
 
                 {age === 'DATA' && (
@@ -227,8 +239,6 @@ function App() {
                         />
                     </Grid>
                 )}
-
-
             </Grid>
             <Container sx={{ marginTop: "2rem" }}>
                 <TableContainer component={Paper}>
@@ -240,6 +250,7 @@ function App() {
                                 <TableCell align="left">Prioridade</TableCell>
                                 <TableCell align="left">Status</TableCell>
                                 <TableCell align="left">Tipo</TableCell>
+                                <TableCell align="left">Data de Entrega</TableCell>
                                 <TableCell align="left">Ações</TableCell>
                             </TableRow>
                         </TableHead>
@@ -255,7 +266,8 @@ function App() {
                                     <TableCell align="left">{row.titulo}</TableCell>
                                     <TableCell align="left">{row.prioridade}</TableCell>
                                     <TableCell align="left">{row.status ? 'Concluída' : 'Pendente'}</TableCell>
-                                    <TableCell align="left">{row.tipo}</TableCell>
+                                    <TableCell align="left">{row.tarefa}</TableCell>
+                                    <TableCell align="left">{calculateDeliveryDate(row)}</TableCell>
                                     <TableCell align="left">
                                         <IconButton onClick={() => {
                                             setSelectedTask(row);
