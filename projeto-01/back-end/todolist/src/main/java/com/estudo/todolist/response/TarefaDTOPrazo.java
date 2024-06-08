@@ -14,11 +14,22 @@ public class TarefaDTOPrazo extends TarefaDTO {
     public TarefaDTOPrazo() {
     }
 
+    public TarefaDTOPrazo(Long id, String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status) {
+        super(id, titulo, prioridade, tipo, status);
+    }
+
     public TarefaDTOPrazo(String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status) {
         super(titulo, prioridade, tipo, status);
     }
 
-    public TarefaDTOPrazo(String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status, int diasPrevisto) {
+    public TarefaDTOPrazo(Long id, String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status,
+            int diasPrevisto) {
+        super(id, titulo, prioridade, tipo, status);
+        this.diasPrevisto = diasPrevisto;
+    }
+
+    public TarefaDTOPrazo(String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status,
+            int diasPrevisto) {
         super(titulo, prioridade, tipo, status);
         this.diasPrevisto = diasPrevisto;
     }

@@ -10,12 +10,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public abstract class TarefaDTO {
+    Long id;
     String titulo;
     Prioridade prioridade;
     TipoTarefa tarefa;
     Boolean status;
 
     public TarefaDTO(String titulo, Prioridade prioridade, TipoTarefa tarefa, Boolean status) {
+        this.titulo = titulo;
+        this.prioridade = prioridade;
+        this.tarefa = tarefa;
+        this.status = status;
+    }
+
+    public TarefaDTO(Long id, String titulo, Prioridade prioridade, TipoTarefa tarefa, Boolean status) {
+        this.id = id;
         this.titulo = titulo;
         this.prioridade = prioridade;
         this.tarefa = tarefa;

@@ -34,8 +34,8 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     private void verificaTitulo(String titulo) {
-        if(titulo == null || titulo.trim().isEmpty()){
-            throw  new TituloInvalidoException("Título não pode ser vazio");
+        if (titulo == null || titulo.trim().isEmpty()) {
+            throw new TituloInvalidoException("Título não pode ser vazio");
         }
     }
 
@@ -45,22 +45,28 @@ public class TarefaServiceImpl implements TarefaService {
         if (request.getDataEsperada().isBefore(LocalDate.now())) {
             throw new DataInvalidaException("A data prevista deve ser igual ou superior à data atual.");
         }
-        Tarefa tarefa = new TarefaData(request.getTitulo(), request.getPrioridade(), request.getTarefa(), request.getStatus(), request.getDataEsperada());
+        Tarefa tarefa = new TarefaData(request.getTitulo(), request.getPrioridade(), request.getTarefa(),
+                request.getStatus(), request.getDataEsperada());
         return tarefaRepository.save(tarefa);
     }
+
     @Override
     public Tarefa criarTarefa(TarefaDTOPrazo request) {
         verificaTitulo(request.getTitulo());
         LocalDate dataPrevista = LocalDate.now().plusDays(request.getDiasPrevisto());
-        Tarefa tarefa = new TarefaData(request.getTitulo(), request.getPrioridade(), request.getTarefa(), request.getStatus(), dataPrevista);
+        Tarefa tarefa = new TarefaData(request.getTitulo(), request.getPrioridade(), request.getTarefa(),
+                request.getStatus(), dataPrevista);
         return tarefaRepository.save(tarefa);
     }
+
     @Override
     public Tarefa criarTarefa(TarefaDTOLivre request) {
         verificaTitulo(request.getTitulo());
-        Tarefa tarefa = new TarefaLivre(request.getTitulo(), request.getPrioridade(), request.getTarefa(), request.getStatus());
+        Tarefa tarefa = new TarefaLivre(request.getTitulo(), request.getPrioridade(), request.getTarefa(),
+                request.getStatus());
         return tarefaRepository.save(tarefa);
     }
+
     @Override
     public Tarefa mudarStatus(long id, boolean status) {
         Tarefa tarefa = tarefaRepository.findById(id).orElse(null);
@@ -95,7 +101,8 @@ public class TarefaServiceImpl implements TarefaService {
         final TipoTarefa tipo = TipoTarefa.DATA;
         List<TarefaDTOData> tarefasData = new ArrayList<>();
         for (TarefaData tarefaData : tarefaRepository.findByTarefaData(TipoTarefa.DATA)) {
-            tarefasData.add(new TarefaDTOData(tarefaData.getTitulo(), tarefaData.getPrioridade(),tipo,tarefaData.getStatus(), tarefaData.getDataEsperada()));
+            tarefasData.add(new TarefaDTOData(tarefaData.getId(),tarefaData.getTitulo(), tarefaData.getPrioridade(), tipo,
+                    tarefaData.getStatus(), tarefaData.getDataEsperada()));
         }
         return tarefasData;
     }
@@ -108,7 +115,8 @@ public class TarefaServiceImpl implements TarefaService {
         for (TarefaData tarefaPrazo : tarefas) {
             LocalDate hoje = LocalDate.now();
             int diasFaltantes = (int) ChronoUnit.DAYS.between(hoje, tarefaPrazo.getDataEsperada());
-            tarefasPrazo.add(new TarefaDTOPrazo(tarefaPrazo.getTitulo(), tarefaPrazo.getPrioridade(),tipo,tarefaPrazo.getStatus(), diasFaltantes));
+            tarefasPrazo.add(new TarefaDTOPrazo(tarefaPrazo.getId(), tarefaPrazo.getTitulo(),
+                    tarefaPrazo.getPrioridade(), tipo, tarefaPrazo.getStatus(), diasFaltantes));
         }
         return tarefasPrazo;
     }
@@ -118,7 +126,8 @@ public class TarefaServiceImpl implements TarefaService {
         final TipoTarefa tipo = TipoTarefa.LIVRE;
         List<TarefaDTOLivre> tarefasLivre = new ArrayList<>();
         for (TarefaLivre tarefaLivre : tarefaRepository.findByLivre(TipoTarefa.LIVRE)) {
-            tarefasLivre.add(new TarefaDTOLivre(tarefaLivre.getTitulo(), tarefaLivre.getPrioridade(), tipo,tarefaLivre.getStatus()));
+            tarefasLivre.add(new TarefaDTOLivre(tarefaLivre.getId(), tarefaLivre.getTitulo(),
+                    tarefaLivre.getPrioridade(), tipo, tarefaLivre.getStatus()));
         }
         return tarefasLivre;
     }

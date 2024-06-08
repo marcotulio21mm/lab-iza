@@ -23,4 +23,9 @@ public class TarefaDTOData extends TarefaDTO {
         this.dataEsperada = dataEsperada;
     }
 
+    public TarefaDTOData(Long id, String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status, LocalDate dataEsperada) {
+        super(id, titulo, prioridade, tipo, status);
+        this.dataEsperada = dataEsperada;
+    }
+
 }

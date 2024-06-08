@@ -10,8 +10,8 @@ import lombok.Setter;
 public class TarefaDTOLivre extends TarefaDTO {
     public TarefaDTOLivre() {
     }
-    public TarefaDTOLivre(String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status) {
-        super(titulo, prioridade, tipo, status);
+    public TarefaDTOLivre(Long id, String titulo, Prioridade prioridade, TipoTarefa tipo, Boolean status) {
+        super(id, titulo, prioridade, tipo, status);
     }
 
    }
