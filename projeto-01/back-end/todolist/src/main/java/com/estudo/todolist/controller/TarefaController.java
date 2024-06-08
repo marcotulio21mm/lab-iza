@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/tarefas")
 public class TarefaController {
 
@@ -34,6 +35,7 @@ public class TarefaController {
     }
     @PostMapping("/v2/data")
     public ResponseEntity<Object> criarTarefa(@RequestBody TarefaDTOData request) {
+        System.out.println(request);
         try {
             return ResponseEntity.ok(tarefaService.criarTarefa(request));
         }catch (TituloInvalidoException | DataInvalidaException ex) {
