@@ -5,10 +5,21 @@ import dayjs from 'dayjs';
 
 const TodoList = ({ tasks, onCheckboxChange, onDelete }) => {
   const calculateDeliveryDate = (task) => {
+    const today = dayjs();
     if (task.tarefa === 'PRAZO') {
-      return dayjs().add(task.diasPrevisto, 'day').format('YYYY-MM-DD');
+      const dueDate = dayjs().add(task.diasPrevisto, 'day');
+      if (dueDate.isBefore(today, 'day')) {
+        return 'Data de conclusão vencida';
+      } else {
+        return `Prazo para conclusão: ${task.diasPrevisto} dias`;
+      }
     } else if (task.tarefa === 'DATA') {
-      return task.dataEsperada;
+      const expectedDate = dayjs(task.dataEsperada);
+      if (expectedDate.isBefore(today, 'day')) {
+        return 'Data de conclusão vencida';
+      } else {
+        return `Data para conclusão: ${expectedDate.format('DD/MM/YYYY')}`;
+      }
     } else {
       return 'N/A';
     }
@@ -35,6 +46,11 @@ const TodoList = ({ tasks, onCheckboxChange, onDelete }) => {
                 <Checkbox
                   checked={task.status === true}
                   onChange={() => onCheckboxChange(task)}
+                  sx={{
+                    '&.Mui-checked': {
+                      color: '#F7A17C',
+                    },
+                  }}
                 />
               </TableCell>
               <TableCell align="left">{task.titulo}</TableCell>

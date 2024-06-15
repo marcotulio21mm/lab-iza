@@ -88,7 +88,7 @@ const TodoForm = ({ addTodo }) => {
         </FormControl>
       </Grid>
       <Grid item xs={2} fullWidth sx={{ textAlign: "center" }}>
-        <Button variant="contained" onClick={handleAddTarefa}>+</Button>
+        <Button sx={{background: "#F7A17C"}} variant="contained" onClick={handleAddTarefa}>+</Button>
       </Grid>
 
       {age === 'DATA' && (
@@ -112,7 +112,7 @@ const TodoForm = ({ addTodo }) => {
         <Grid item xs={4}>
           <TextField
             id="dias-previsto"
-            label="Dias Previsto"
+            label="Dias Previstos"
             fullWidth
             size='small'
             type="number"
